@@ -1,18 +1,27 @@
 package com.example.etas.controllers;
 
+import com.example.etas.MainVerticle;
 import com.example.etas.models.Cab;
 import com.example.etas.services.CabService;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.vertx.core.json.Json;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import io.vertx.reactivex.ext.web.handler.BodyHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+@Singleton
 public class CabController {
 
   private final CabService cabService;
+  private static final Logger logger = LoggerFactory.getLogger(CabController.class);
 
+  @Inject
   public CabController(CabService cabService) {
     this.cabService = cabService;
+    logger.debug("CabController Created");
   }
 
   public void mount(Router router){

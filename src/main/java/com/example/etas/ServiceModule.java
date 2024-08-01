@@ -11,6 +11,7 @@ import com.example.etas.repositories.EmployeeRepository;
 import com.example.etas.services.BookingService;
 import com.example.etas.services.CabService;
 import com.example.etas.services.EmployeeService;
+import com.google.inject.Singleton;
 import com.typesafe.config.Config;
 import io.vertx.reactivex.ext.jdbc.JDBCClient;
 
@@ -26,21 +27,30 @@ public class ServiceModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(JDBCClient.class).toInstance(jdbcClient);
+    bind(Config.class).toInstance(config);
 
-    bind(HttpServerVerticle.class).toInstance(new HttpServerVerticle(jdbcClient, config));
+    bind(HttpServerVerticle.class).in(Singleton.class);
+//    bind(HttpServerVerticle.class).toInstance(new HttpServerVerticle(jdbcClient, config));
 
+    bind(EmployeeRepository.class).in(Singleton.class);
+//    bind(EmployeeRepository.class).toInstance(new EmployeeRepository(jdbcClient));
+    bind(CabRepository.class).in(Singleton.class);
+//    bind(CabRepository.class).toInstance(new CabRepository(jdbcClient));
+    bind(BookingRepository.class).in(Singleton.class);
+//    bind(BookingRepository.class).toInstance(new BookingRepository(jdbcClient));
 
-    bind(EmployeeRepository.class).toInstance(new EmployeeRepository(jdbcClient));
-    bind(CabRepository.class).toInstance(new CabRepository(jdbcClient));
-    bind(BookingRepository.class).toInstance(new BookingRepository(jdbcClient));
+    bind(EmployeeService.class).in(Singleton.class);
+    bind(CabService.class).in(Singleton.class);
+    bind(BookingService.class).in(Singleton.class);
+//    bind(EmployeeService.class).toInstance(new EmployeeService(new EmployeeRepository(jdbcClient)));
+//    bind(CabService.class).toInstance(new CabService(new CabRepository(jdbcClient)));
+//    bind(BookingService.class).toInstance(new BookingService(new BookingRepository(jdbcClient), new CabRepository(jdbcClient)));
 
-
-    bind(EmployeeService.class).toInstance(new EmployeeService(new EmployeeRepository(jdbcClient)));
-    bind(CabService.class).toInstance(new CabService(new CabRepository(jdbcClient)));
-    bind(BookingService.class).toInstance(new BookingService(new BookingRepository(jdbcClient), new CabRepository(jdbcClient)));
-
-    bind(EmployeeController.class).toInstance(new EmployeeController(new EmployeeService(new EmployeeRepository(jdbcClient))));
-    bind(CabController.class).toInstance(new CabController(new CabService(new CabRepository(jdbcClient))));
-    bind(BookingController.class).toInstance(new BookingController(new BookingService(new BookingRepository(jdbcClient), new CabRepository(jdbcClient))));
+      bind(EmployeeController.class).in(Singleton.class);
+      bind(CabController.class).in(Singleton.class);
+      bind(BookingController.class).in(Singleton.class);
+//    bind(EmployeeController.class).toInstance(new EmployeeController(new EmployeeService(new EmployeeRepository(jdbcClient))));
+//    bind(CabController.class).toInstance(new CabController(new CabService(new CabRepository(jdbcClient))));
+//    bind(BookingController.class).toInstance(new BookingController(new BookingService(new BookingRepository(jdbcClient), new CabRepository(jdbcClient))));
   }
 }

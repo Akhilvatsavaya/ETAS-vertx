@@ -1,20 +1,29 @@
 package com.example.etas.controllers;
 
+import com.example.etas.MainVerticle;
 import com.example.etas.dtos.BookingRequest;
 import com.example.etas.dtos.RequestError;
 import com.example.etas.dtos.RequestSuccess;
 import com.example.etas.services.BookingService;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.vertx.core.json.Json;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import io.vertx.reactivex.ext.web.handler.BodyHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+@Singleton
 public class BookingController {
 
   private final BookingService bookingService;
+  private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
 
+  @Inject
   public BookingController(BookingService bookingService) {
     this.bookingService = bookingService;
+    logger.debug("BookingController Created");
   }
 
   public void mount(Router router)

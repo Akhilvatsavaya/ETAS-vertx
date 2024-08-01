@@ -1,19 +1,29 @@
 package com.example.etas.repositories;
 
 import com.example.etas.models.Booking;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.reactivex.Single;
 import io.vertx.core.json.JsonArray;
 import io.vertx.reactivex.ext.jdbc.JDBCClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Singleton
 public class BookingRepository {
 
   private final JDBCClient jdbcClient;
+  private final Logger logger = LoggerFactory.getLogger(BookingRepository.class);
 
+
+  @Inject
   public BookingRepository(JDBCClient jdbcClient) {
     this.jdbcClient = jdbcClient;
+
+    logger.debug("Booking Repository Created");
   }
 
   public Single<List<Booking>> findAll() {

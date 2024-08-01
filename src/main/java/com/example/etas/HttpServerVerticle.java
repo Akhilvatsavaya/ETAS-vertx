@@ -9,6 +9,7 @@ import com.example.etas.services.BookingService;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Singleton;
 import com.typesafe.config.Config;
 import io.reactivex.Completable;
 import io.vertx.reactivex.core.AbstractVerticle;
@@ -17,6 +18,7 @@ import io.vertx.reactivex.ext.web.Router;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Singleton
 public class HttpServerVerticle extends AbstractVerticle {
 
   private final JDBCClient jdbcClient;

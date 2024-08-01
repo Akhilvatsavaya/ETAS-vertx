@@ -1,10 +1,15 @@
 package com.example.etas.services;
 
+import com.example.etas.HttpServerVerticle;
 import com.example.etas.models.Booking;
 import com.example.etas.models.Cab;
 import com.example.etas.repositories.BookingRepository;
 import com.example.etas.repositories.CabRepository;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import io.reactivex.Single;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.SQLOutput;
 import java.time.LocalDateTime;
@@ -12,15 +17,20 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
 
+@Singleton
 public class BookingService {
 
   private final BookingRepository bookingRepository;
   private final CabRepository cabRepository;
   private Random random = new Random();
 
+  private static final Logger logger = LoggerFactory.getLogger(HttpServerVerticle.class);
+
+  @Inject
   public BookingService(BookingRepository bookingRepository, CabRepository cabRepository) {
     this.bookingRepository = bookingRepository;
     this.cabRepository = cabRepository;
+    logger.debug("BookingService Created");
   }
 
   public Single<List<Booking>> getAllBookings() {
