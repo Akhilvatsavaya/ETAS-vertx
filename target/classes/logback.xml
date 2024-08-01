@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+  <!-- Console appender configuration -->
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%green(%d{yyyy-MM-dd HH:mm:ss}) [%red(%thread)] %blue(%-5level) %cyan(%logger{36}) - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Root logger configuration -->
+  <root level="OFF">
+    <appender-ref ref="STDOUT" />
+  </root>
+
+  <!-- Specific logger configuration for your application -->
+  <logger name="com.example.etas" level="debug" additivity="false">
+    <appender-ref ref="STDOUT" />
+  </logger>
+
+</configuration>
