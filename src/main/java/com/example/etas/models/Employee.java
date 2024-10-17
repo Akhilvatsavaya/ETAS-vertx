@@ -2,6 +2,11 @@ package com.example.etas.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+
+@XmlRootElement(name = "employee")
 public class Employee {
 
   private Long id;
@@ -17,6 +22,7 @@ public class Employee {
   private String phone;
   private String address;
 
+  @XmlElement
   public Long getId() {
     return id;
   }
@@ -25,6 +31,7 @@ public class Employee {
     this.id = id;
   }
 
+  @XmlElement
   public String getFullName() {
     return fullName;
   }
@@ -33,6 +40,7 @@ public class Employee {
     this.fullName = fullName;
   }
 
+  @XmlElement
   public String getDesignation() {
     return designation;
   }
@@ -41,6 +49,7 @@ public class Employee {
     this.designation = designation;
   }
 
+  @XmlElement
   public String getJoiningDate() {
     return joiningDate;
   }
@@ -49,6 +58,7 @@ public class Employee {
     this.joiningDate = joiningDate;
   }
 
+  @XmlElement
   public String getEmail() {
     return email;
   }
@@ -57,6 +67,7 @@ public class Employee {
     this.email = email;
   }
 
+  @XmlElement
   public String getPhone() {
     return phone;
   }
@@ -65,6 +76,7 @@ public class Employee {
     this.phone = phone;
   }
 
+  @XmlElement
   public String getAddress() {
     return address;
   }

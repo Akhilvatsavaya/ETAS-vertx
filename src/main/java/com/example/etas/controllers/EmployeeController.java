@@ -2,11 +2,15 @@ package com.example.etas.controllers;
 
 import com.example.etas.models.Employee;
 import com.example.etas.services.EmployeeService;
+import com.example.etas.wrapper.EmployeeListWrapper;
 import io.vertx.core.json.Json;
 import io.vertx.reactivex.ext.web.Router;
 import io.vertx.reactivex.ext.web.RoutingContext;
 import io.vertx.reactivex.ext.web.handler.BodyHandler;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -44,23 +48,53 @@ public class EmployeeController {
 //    });
 //  }
 
-  // XML Format
+  // XML Format using JavaStax
+//  private void getAllEmployees(RoutingContext context)
+//  {
+//    employeeService.getAllEmployees().subscribe(
+//            employees -> {
+//              try{
+//                String xmlResponse = generateXMLResponse(employees);
+//                context.response()
+//                        .putHeader("Content-Type", "application/xml")
+//                        .end(xmlResponse);
+//              }catch (XMLStreamException e){
+//                context.response()
+//                        .setStatusCode(500)
+//                        .end("Error genrating XML: " + e.getMessage());
+//              }
+//            }, throwable -> {
+//              context.response().setStatusCode(500).end(throwable.getMessage());
+//            }
+//    );
+//  }
+
+
+  //XML Format using JAXB
   private void getAllEmployees(RoutingContext context)
   {
     employeeService.getAllEmployees().subscribe(
             employees -> {
               try{
-                String xmlResponse = generateXMLResponse(employees);
+                EmployeeListWrapper wrapper = new EmployeeListWrapper();
+                wrapper.setEmployees(employees);
+
+                String xmlResponse = convertToXml(wrapper);
                 context.response()
                         .putHeader("Content-Type", "application/xml")
                         .end(xmlResponse);
-              }catch (XMLStreamException e){
+
+              }
+              catch (JAXBException e)
+              {
                 context.response()
                         .setStatusCode(500)
-                        .end("Error genrating XML: " + e.getMessage());
+                        .end("Error generating XML: " + e.getMessage());
               }
             }, throwable -> {
-              context.response().setStatusCode(500).end(throwable.getMessage());
+              context.response()
+                      .setStatusCode(500)
+                      .end(throwable.getMessage());
             }
     );
   }
@@ -117,6 +151,19 @@ public class EmployeeController {
     });
   }
 
+  //For XML Format using JAXB
+  private String convertToXml(EmployeeListWrapper wrapper) throws JAXBException
+  {
+    JAXBContext context = JAXBContext.newInstance(EmployeeListWrapper.class);
+    Marshaller marshaller = context.createMarshaller();
+    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+    StringWriter stringWriter = new StringWriter();
+    marshaller.marshal(wrapper, stringWriter);
+    return stringWriter.toString();
+  }
+
+  //For XML Format using Java StAX
   private String generateXMLResponse(List<Employee> employees) throws XMLStreamException{
     StringWriter stringWriter = new StringWriter();
     XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
